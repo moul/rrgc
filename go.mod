@@ -1,4 +1,4 @@
-module moul.io/golang-repo-template
+module moul.io/rrgc
 
 go 1.13
 
