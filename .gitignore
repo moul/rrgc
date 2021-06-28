@@ -32,3 +32,5 @@ gin-bin
 
 # IDE settings
 .idea
+
+logs/

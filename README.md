@@ -1,13 +1,13 @@
 # rrgc
 
-:smile: rrgc
+ 🗑 round-robin garbage-collector
 
 [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/moul.io/rrgc)
 [![License](https://img.shields.io/badge/license-Apache--2.0%20%2F%20MIT-%2397ca00.svg)](https://github.com/moul/rrgc/blob/main/COPYRIGHT)
 [![GitHub release](https://img.shields.io/github/release/moul/rrgc.svg)](https://github.com/moul/rrgc/releases)
 [![Docker Metrics](https://images.microbadger.com/badges/image/moul/rrgc.svg)](https://microbadger.com/images/moul/rrgc)
 [![Made by Manfred Touron](https://img.shields.io/badge/made%20by-Manfred%20Touron-blue.svg?style=flat)](https://manfred.life/)
-
+n
 [![Go](https://github.com/moul/rrgc/workflows/Go/badge.svg)](https://github.com/moul/rrgc/actions?query=workflow%3AGo)
 [![Release](https://github.com/moul/rrgc/workflows/Release/badge.svg)](https://github.com/moul/rrgc/actions?query=workflow%3ARelease)
 [![PR](https://github.com/moul/rrgc/workflows/PR/badge.svg)](https://github.com/moul/rrgc/actions?query=workflow%3APR)
@@ -20,16 +20,112 @@
 
 ## Usage
 
+### As a CLI tool
+
 [embedmd]:# (.tmp/usage.txt console)
 ```console
-foo@bar:~$ rrgc hello world
-            _                                                   _                      _        _
- __ _  ___ | | __ _  _ _   __ _  ___  _ _  ___  _ __  ___  ___ | |_  ___  _ __   _ __ | | __ _ | |_  ___
-/ _` |/ _ \| |/ _` || ' \ / _` ||___|| '_|/ -_)| '_ \/ _ \|___||  _|/ -_)| '  \ | '_ \| |/ _` ||  _|/ -_)
-\__, |\___/|_|\__,_||_||_|\__, |     |_|  \___|| .__/\___/      \__|\___||_|_|_|| .__/|_|\__,_| \__|\___|
-|___/                     |___/                |_|                              |_|
-12 CPUs, /home/moul/.gvm/pkgsets/go1.16/global/bin/rrgc, fwrz, go1.16
-args ["rrgc","hello","world"]
+foo@bar:~$ rrgc -h
+USAGE
+  rrgc WINDOWS -- GLOBS
+
+FLAGS
+  -debug false    debug
+  -dry-run false  dry-run
+  -verbose false  verbose
+foo@bar:~$ ls logs
+A.log
+B.log
+C.log
+D.log
+E.log
+F.log
+G.log
+H.log
+I.log
+J.log
+K.log
+L.log
+M.log
+N.log
+O.log
+P.log
+Q.log
+R.log
+foo@bar:~$ rrgc --dry-run 24h,5 1h,5 -- ./logs/*.log
+rm "logs/B.log"
+rm "logs/C.log"
+rm "logs/E.log"
+rm "logs/H.log"
+rm "logs/M.log"
+rm "logs/N.log"
+rm "logs/O.log"
+rm "logs/P.log"
+rm "logs/Q.log"
+rm "logs/R.log"
+foo@bar:~$ rrgc 24h,5 1h,5 -- ./logs/*.log
+foo@bar:~$ ls logs
+A.log
+D.log
+F.log
+G.log
+I.log
+J.log
+K.log
+L.log
+```
+
+### As a Library
+
+[embedmd]:# (rrgc/example_test.go /import\ / $)
+```go
+import (
+    "os"
+    "time"
+
+    "moul.io/rrgc/rrgc"
+)
+
+func Example() {
+    logGlobs := []string{
+        "*/*.log",
+        "*/*.log.gz",
+    }
+    windows := []rrgc.Window{
+        {Every: 2 * time.Hour, MaxKeep: 5},
+        {Every: time.Hour * 24, MaxKeep: 4},
+        {Every: time.Hour * 24 * 7, MaxKeep: 3},
+    }
+    toDelete, _ := rrgc.GCListByPathGlobs(logGlobs, windows)
+    for _, path := range toDelete {
+        _ = os.Remove(path)
+    }
+}
+```
+
+[embedmd]:# (.tmp/godoc.txt txt /FUNCTIONS/ $)
+```txt
+FUNCTIONS
+
+func GCListByPathGlobs(inputs []string, windows []Window) ([]string, error)
+    GCListByPathGlobs computes a list of paths that should be deleted, based on
+    a list of windows.
+
+
+TYPES
+
+type Window struct {
+    Every   time.Duration
+    MaxKeep int
+}
+    Window defines a file preservation rule.
+
+func ParseWindow(input string) (Window, error)
+    ParseWindow parses a human-readable Window definition.
+
+    Syntax: "Duration,MaxKeep".
+
+    Examples: "1h,5" "1h2m3s,42".
+
 ```
 
 ## Install

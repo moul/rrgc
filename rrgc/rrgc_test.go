@@ -175,6 +175,53 @@ func TestFilterFilesByWindows(t *testing.T) {
 	}
 }
 
+func TestParseWindow(t *testing.T) {
+	cases := []struct {
+		input            string
+		expectedDuration time.Duration
+		expectedMaxKeep  int
+		expectError      bool
+	}{
+		{
+			"1h,5",
+			time.Hour,
+			5,
+			false,
+		},
+		{
+			"1h,0",
+			time.Hour,
+			0,
+			false,
+		},
+		{
+			"2h3m4s,42",
+			2*time.Hour + 3*time.Minute + 4*time.Second,
+			42,
+			false,
+		},
+		{"1h", 0, 0, true},
+		{"1J,1", 0, 0, true},
+		{"1,1", 0, 0, true},
+		{",1", 0, 0, true},
+		{"1h,1,", 0, 0, true},
+		{"1h,-1", 0, 0, true},
+		{"1h,1.5", 0, 0, true},
+	}
+	for _, tc := range cases {
+		t.Run(tc.input, func(t *testing.T) {
+			window, err := ParseWindow(tc.input)
+			if tc.expectError {
+				require.Error(t, err)
+			} else {
+				require.NoError(t, err)
+				assert.Equal(t, window.Every, tc.expectedDuration)
+				assert.Equal(t, window.MaxKeep, tc.expectedMaxKeep)
+			}
+		})
+	}
+}
+
 func mustTimeParse(input string) time.Time {
 	parsed, err := time.Parse(time.RFC3339, input)
 	if err != nil {
