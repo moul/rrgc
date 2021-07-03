@@ -76,11 +76,14 @@ func run(args []string) error {
 }
 
 func doRoot(ctx context.Context, args []string) error {
+	// check if enough args
 	var (
-		windows = make([]rrgc.Window, 0)
-		globs   = make([]string, 0)
+		rawWindows = []string{}
+		windows    = make([]rrgc.Window, 0)
+		globs      = make([]string, 0)
+
+		modeGlob = false
 	)
-	modeGlob := false
 	for _, arg := range args {
 		switch {
 		case !modeGlob && arg == "--":
@@ -88,25 +91,31 @@ func doRoot(ctx context.Context, args []string) error {
 		case modeGlob && arg == "--":
 			return flag.ErrHelp
 		case !modeGlob:
-			window, err := rrgc.ParseWindow(arg)
-			if err != nil {
-				return fmt.Errorf("parse window: %q: %w", window, err)
-			}
-			windows = append(windows, window)
+			rawWindows = append(rawWindows, arg)
 		default:
-			// FIXME: check glob input?
 			globs = append(globs, arg)
 		}
 	}
-	if len(windows) == 0 || len(globs) == 0 {
+	if len(rawWindows) == 0 || len(globs) == 0 {
 		return flag.ErrHelp
 	}
+
+	// parse input formats;
+	for _, rawWindow := range rawWindows {
+		window, err := rrgc.ParseWindow(rawWindow)
+		if err != nil {
+			return fmt.Errorf("parse window: %q: %w", rawWindow, err)
+		}
+		windows = append(windows, window)
+	}
+	// FIXME: check glob input?
+
+	// perform rrgc with sanitized inputs
 	opts.logger.Debug(
 		"args",
 		zap.Any("windows", windows),
 		zap.Strings("globs", globs),
 	)
-
 	toDelete, err := rrgc.GCListByPathGlobs(globs, windows)
 	if err != nil {
 		return fmt.Errorf("compute GC list: %w", err)

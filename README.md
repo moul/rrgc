@@ -79,26 +79,26 @@ L.log
 [embedmd]:# (rrgc/example_test.go /import\ / $)
 ```go
 import (
-    "os"
-    "time"
+	"os"
+	"time"
 
-    "moul.io/rrgc/rrgc"
+	"moul.io/rrgc/rrgc"
 )
 
 func Example() {
-    logGlobs := []string{
-        "*/*.log",
-        "*/*.log.gz",
-    }
-    windows := []rrgc.Window{
-        {Every: 2 * time.Hour, MaxKeep: 5},
-        {Every: time.Hour * 24, MaxKeep: 4},
-        {Every: time.Hour * 24 * 7, MaxKeep: 3},
-    }
-    toDelete, _ := rrgc.GCListByPathGlobs(logGlobs, windows)
-    for _, path := range toDelete {
-        _ = os.Remove(path)
-    }
+	logGlobs := []string{
+		"*/*.log",
+		"*/*.log.gz",
+	}
+	windows := []rrgc.Window{
+		{Every: 2 * time.Hour, MaxKeep: 5},
+		{Every: time.Hour * 24, MaxKeep: 4},
+		{Every: time.Hour * 24 * 7, MaxKeep: 3},
+	}
+	toDelete, _ := rrgc.GCListByPathGlobs(logGlobs, windows)
+	for _, path := range toDelete {
+		_ = os.Remove(path)
+	}
 }
 ```
 
@@ -114,8 +114,8 @@ func GCListByPathGlobs(inputs []string, windows []Window) ([]string, error)
 TYPES
 
 type Window struct {
-    Every   time.Duration
-    MaxKeep int
+	Every   time.Duration
+	MaxKeep int
 }
     Window defines a file preservation rule.
 
