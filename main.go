@@ -8,10 +8,10 @@ import (
 	"math/rand"
 	"os"
 
-	"github.com/peterbourgon/ff/v3/ffcli"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"moul.io/climan"
 	"moul.io/rrgc/rrgc"
 	"moul.io/srand"
 	"moul.io/zapconfig"
@@ -35,13 +35,13 @@ var opts struct {
 
 func run(args []string) error {
 	// setup CLI
-	rootFs := flag.NewFlagSet("rrgc", flag.ExitOnError)
-	rootFs.BoolVar(&opts.dryRun, "dry-run", opts.dryRun, "dry-run")
-	rootFs.BoolVar(&opts.debug, "debug", opts.debug, "debug")
-	rootFs.BoolVar(&opts.verbose, "verbose", opts.verbose, "verbose")
-	root := &ffcli.Command{
-		Name:       "rrgc",
-		FlagSet:    rootFs,
+	root := &climan.Command{
+		Name: "rrgc",
+		FlagSetBuilder: func(fs *flag.FlagSet) {
+			fs.BoolVar(&opts.dryRun, "dry-run", opts.dryRun, "dry-run")
+			fs.BoolVar(&opts.debug, "debug", opts.debug, "debug")
+			fs.BoolVar(&opts.verbose, "verbose", opts.verbose, "verbose")
+		},
 		ShortUsage: "rrgc WINDOWS -- GLOBS",
 		Exec:       doRoot,
 	}

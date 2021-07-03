@@ -98,9 +98,12 @@ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C
 gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b h1:h8qDotaEPuJATrMmW04NCwg7v22aHH28wwpauUhK9Oo=
 gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 honnef.co/go/tools v0.0.1-2019.2.3/go.mod h1:a3bituU0lyd329TUQxRnasdCoJDkEUEAqEt0JzvZhAg=
+moul.io/climan v1.0.0 h1:Xc9xnUrLVPK69lnCfVJnCvVtMm4v6Lt2743fnadvpWc=
+moul.io/climan v1.0.0/go.mod h1:iT29NKBU5U7cAYxmpt9XXfv3PV1OW+5OKvze553VTwc=
 moul.io/srand v1.6.1 h1:SJ335F+54ivLdlH7wH52Rtyv0Ffos6DpsF5wu3ZVMXU=
 moul.io/srand v1.6.1/go.mod h1:P2uaZB+GFstFNo8sEj6/U8FRV1n25kD0LLckFpJ+qvc=
-moul.io/u v1.23.0 h1:ZHfDUsUMfRG3e0A7gBYOo8SkKqe02Pc5zuQUVxq4+tg=
 moul.io/u v1.23.0/go.mod h1:ytlQ/zt+Sdk+PFGEx+fpTivoa0ieA5yMo6itRswIWNQ=
+moul.io/u v1.25.1 h1:yNbB11OGz2HbBxOPh7lFo2fMgw+j8Af1CbRdacr/+vQ=
+moul.io/u v1.25.1/go.mod h1:ggYDXxUjoHpfDsMPD3STqkUZTyA741PZiQhSd+7kRnA=
 moul.io/zapconfig v1.4.0 h1:J3ND5J3e/qQ++jlpqdSR1EtDNV+iujtvXgLsjy1uyq8=
 moul.io/zapconfig v1.4.0/go.mod h1:bYTa5j7r82yPmSR6i5CcrPSVoWEbdpN7o9IgndSVby8=
