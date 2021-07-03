@@ -8,7 +8,6 @@ import (
 	"math/rand"
 	"os"
 
-	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"moul.io/climan"
@@ -27,10 +26,8 @@ func main() {
 }
 
 var opts struct {
-	dryRun  bool
-	debug   bool
-	verbose bool
-	logger  *zap.Logger
+	debug  bool
+	logger *zap.Logger
 }
 
 func run(args []string) error {
@@ -38,9 +35,7 @@ func run(args []string) error {
 	root := &climan.Command{
 		Name: "rrgc",
 		FlagSetBuilder: func(fs *flag.FlagSet) {
-			fs.BoolVar(&opts.dryRun, "dry-run", opts.dryRun, "dry-run")
 			fs.BoolVar(&opts.debug, "debug", opts.debug, "debug")
-			fs.BoolVar(&opts.verbose, "verbose", opts.verbose, "verbose")
 		},
 		ShortUsage: "rrgc WINDOWS -- GLOBS",
 		Exec:       doRoot,
@@ -121,22 +116,11 @@ func doRoot(ctx context.Context, args []string) error {
 		return fmt.Errorf("compute GC list: %w", err)
 	}
 	opts.logger.Debug(
-		"to delete",
-		zap.Strings("paths", toDelete),
-		zap.Bool("dry-run", opts.dryRun),
-		zap.Bool("verbose", opts.verbose),
+		"results",
+		zap.Strings("to-delete", toDelete),
 	)
-	var errs error
 	for _, path := range toDelete {
-		if opts.dryRun || opts.verbose {
-			fmt.Printf("rm %q\n", path)
-		}
-		if !opts.dryRun {
-			err := os.Remove(path)
-			if err != nil {
-				errs = multierr.Append(errs, fmt.Errorf("delete %q: %w", path, err))
-			}
-		}
+		fmt.Println(path)
 	}
-	return errs
+	return nil
 }

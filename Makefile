@@ -9,11 +9,11 @@ generate: install _gen-logs-dir
 	GO111MODULE=off go get github.com/campoy/embedmd
 	mkdir -p .tmp
 	echo 'foo@bar:~$$ rrgc -h' > .tmp/usage.txt
-	rrgc -h 2>> .tmp/usage.txt
+	(rrgc -h || true) 2>> .tmp/usage.txt
 	echo 'foo@bar:~$$ ls logs' >> .tmp/usage.txt
 	ls logs >> .tmp/usage.txt
-	echo 'foo@bar:~$$ rrgc --dry-run 24h,5 1h,5 -- ./logs/*.log' >> .tmp/usage.txt
-	rrgc --dry-run 24h,5 1h,5 -- "./logs/*.log" >> .tmp/usage.txt
+	echo 'foo@bar:~$$ rrgc 24h,5 1h,5 -- ./logs/*.log | xargs rm -v' >> .tmp/usage.txt
+	rrgc 24h,5 1h,5 -- "./logs/*.log" | xargs rm -v >> .tmp/usage.txt
 	echo 'foo@bar:~$$ rrgc 24h,5 1h,5 -- ./logs/*.log' >> .tmp/usage.txt
 	rrgc 24h,5 1h,5 -- "./logs/*.log" >> .tmp/usage.txt
 	echo 'foo@bar:~$$ ls logs' >> .tmp/usage.txt

@@ -29,9 +29,7 @@ USAGE
   rrgc WINDOWS -- GLOBS
 
 FLAGS
-  -debug false    debug
-  -dry-run false  dry-run
-  -verbose false  verbose
+  -debug false  debug
 foo@bar:~$ ls logs
 A.log
 B.log
@@ -51,17 +49,17 @@ O.log
 P.log
 Q.log
 R.log
-foo@bar:~$ rrgc --dry-run 24h,5 1h,5 -- ./logs/*.log
-rm "logs/B.log"
-rm "logs/C.log"
-rm "logs/E.log"
-rm "logs/H.log"
-rm "logs/M.log"
-rm "logs/N.log"
-rm "logs/O.log"
-rm "logs/P.log"
-rm "logs/Q.log"
-rm "logs/R.log"
+foo@bar:~$ rrgc 24h,5 1h,5 -- ./logs/*.log | xargs rm -v
+removed 'logs/B.log'
+removed 'logs/C.log'
+removed 'logs/E.log'
+removed 'logs/H.log'
+removed 'logs/M.log'
+removed 'logs/N.log'
+removed 'logs/O.log'
+removed 'logs/P.log'
+removed 'logs/Q.log'
+removed 'logs/R.log'
 foo@bar:~$ rrgc 24h,5 1h,5 -- ./logs/*.log
 foo@bar:~$ ls logs
 A.log
