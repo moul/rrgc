@@ -93,7 +93,7 @@ func Example() {
 		{Every: time.Hour * 24, MaxKeep: 4},
 		{Every: time.Hour * 24 * 7, MaxKeep: 3},
 	}
-	toDelete, _ := rrgc.GCListByPathGlobs(logGlobs, windows)
+	_, toDelete, _ := rrgc.GCListByPathGlobs(logGlobs, windows)
 	for _, path := range toDelete {
 		_ = os.Remove(path)
 	}
@@ -104,9 +104,9 @@ func Example() {
 ```txt
 FUNCTIONS
 
-func GCListByPathGlobs(inputs []string, windows []Window) ([]string, error)
-    GCListByPathGlobs computes a list of paths that should be deleted, based on
-    a list of windows.
+func GCListByPathGlobs(inputs []string, windows []Window) ([]string, []string, error)
+    GCListByPathGlobs computes a list of paths that should be kept and deleted,
+    based on a list of window rules.
 
 
 TYPES

@@ -45,19 +45,19 @@ func ParseWindow(input string) (Window, error) {
 	}, nil
 }
 
-// GCListByPathGlobs computes a list of paths that should be deleted, based on a list of windows.
-func GCListByPathGlobs(inputs []string, windows []Window) ([]string, error) {
+// GCListByPathGlobs computes a list of paths that should be kept and deleted, based on a list of window rules.
+func GCListByPathGlobs(inputs []string, windows []Window) ([]string, []string, error) {
 	files, err := fileListByPathGlobs(inputs)
 	if err != nil {
-		return nil, fmt.Errorf("file list by path globs: %w", err)
+		return nil, nil, fmt.Errorf("file list by path globs: %w", err)
 	}
 
-	_, drop, err := filterFilesByWindows(files, windows)
+	keep, drop, err := filterFilesByWindows(files, windows)
 	if err != nil {
-		return nil, fmt.Errorf("filter files by windows: %w", err)
+		return nil, nil, fmt.Errorf("filter files by windows: %w", err)
 	}
 
-	return drop, nil
+	return keep, drop, nil
 }
 
 type file struct {

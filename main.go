@@ -26,8 +26,9 @@ func main() {
 }
 
 var opts struct {
-	debug  bool
-	logger *zap.Logger
+	debug     bool
+	printKeep bool
+	logger    *zap.Logger
 }
 
 func run(args []string) error {
@@ -36,6 +37,7 @@ func run(args []string) error {
 		Name: "rrgc",
 		FlagSetBuilder: func(fs *flag.FlagSet) {
 			fs.BoolVar(&opts.debug, "debug", opts.debug, "debug")
+			fs.BoolVar(&opts.printKeep, "keep", opts.printKeep, "print list of files to keep instead of files to delete")
 		},
 		ShortUsage: "rrgc WINDOWS -- GLOBS",
 		Exec:       doRoot,
@@ -111,16 +113,20 @@ func doRoot(ctx context.Context, args []string) error {
 		zap.Any("windows", windows),
 		zap.Strings("globs", globs),
 	)
-	toDelete, err := rrgc.GCListByPathGlobs(globs, windows)
+	toKeep, toDelete, err := rrgc.GCListByPathGlobs(globs, windows)
 	if err != nil {
 		return fmt.Errorf("compute GC list: %w", err)
 	}
-	opts.logger.Debug(
-		"results",
-		zap.Strings("to-delete", toDelete),
-	)
-	for _, path := range toDelete {
-		fmt.Println(path)
+	opts.logger.Debug("to keep", zap.Strings("paths", toKeep))
+	opts.logger.Debug("to delete", zap.Strings("paths", toDelete))
+	if opts.printKeep {
+		for _, path := range toKeep {
+			fmt.Println(path)
+		}
+	} else {
+		for _, path := range toDelete {
+			fmt.Println(path)
+		}
 	}
 	return nil
 }

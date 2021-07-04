@@ -17,7 +17,7 @@ func Example() {
 		{Every: time.Hour * 24, MaxKeep: 4},
 		{Every: time.Hour * 24 * 7, MaxKeep: 3},
 	}
-	toDelete, _ := rrgc.GCListByPathGlobs(logGlobs, windows)
+	_, toDelete, _ := rrgc.GCListByPathGlobs(logGlobs, windows)
 	for _, path := range toDelete {
 		_ = os.Remove(path)
 	}
