@@ -50,6 +50,26 @@ O.log
 P.log
 Q.log
 R.log
+foo@bar:~$ rrgc 24h,5 1h,5 -- ./logs/*.log
+logs/B.log
+logs/C.log
+logs/E.log
+logs/H.log
+logs/M.log
+logs/N.log
+logs/O.log
+logs/P.log
+logs/Q.log
+logs/R.log
+foo@bar:~$ rrgc --keep 24h,5 1h,5 -- ./logs/*.log
+logs/A.log
+logs/D.log
+logs/F.log
+logs/G.log
+logs/I.log
+logs/J.log
+logs/K.log
+logs/L.log
 foo@bar:~$ rrgc 24h,5 1h,5 -- ./logs/*.log | xargs rm -v
 removed 'logs/B.log'
 removed 'logs/C.log'
@@ -61,7 +81,6 @@ removed 'logs/O.log'
 removed 'logs/P.log'
 removed 'logs/Q.log'
 removed 'logs/R.log'
-foo@bar:~$ rrgc 24h,5 1h,5 -- ./logs/*.log
 foo@bar:~$ ls logs
 A.log
 D.log
