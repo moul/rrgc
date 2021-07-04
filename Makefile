@@ -12,10 +12,12 @@ generate: install _gen-logs-dir
 	(rrgc -h || true) 2>> .tmp/usage.txt
 	echo 'foo@bar:~$$ ls logs' >> .tmp/usage.txt
 	ls logs >> .tmp/usage.txt
-	echo 'foo@bar:~$$ rrgc 24h,5 1h,5 -- ./logs/*.log | xargs rm -v' >> .tmp/usage.txt
-	rrgc 24h,5 1h,5 -- "./logs/*.log" | xargs rm -v >> .tmp/usage.txt
 	echo 'foo@bar:~$$ rrgc 24h,5 1h,5 -- ./logs/*.log' >> .tmp/usage.txt
 	rrgc 24h,5 1h,5 -- "./logs/*.log" >> .tmp/usage.txt
+	echo 'foo@bar:~$$ rrgc --keep 24h,5 1h,5 -- ./logs/*.log' >> .tmp/usage.txt
+	rrgc --keep 24h,5 1h,5 -- "./logs/*.log" >> .tmp/usage.txt
+	echo 'foo@bar:~$$ rrgc 24h,5 1h,5 -- ./logs/*.log | xargs rm -v' >> .tmp/usage.txt
+	rrgc 24h,5 1h,5 -- "./logs/*.log" | xargs rm -v >> .tmp/usage.txt
 	echo 'foo@bar:~$$ ls logs' >> .tmp/usage.txt
 	ls logs >> .tmp/usage.txt
 	go doc -all ./rrgc > .tmp/godoc.txt
