@@ -30,6 +30,7 @@ USAGE
 
 FLAGS
   -debug false  debug
+  -keep false   print list of files to keep instead of files to delete
 foo@bar:~$ ls logs
 A.log
 B.log
